@@ -56,7 +56,7 @@ pipeline {
               do
               test=$(basename $file)
               filename="${test%.*}"
-              curl -u 'uploader:6[#H[_HHPUAq$`mT' -T $file "https://artifactory.wma.chs.usgs.gov/artifactory/wma-binaries/lfs/api/nwc2wmadataprep/"$(basename $file)""
+              curl -u ''$artuser:$artpass'' -T $file "https://artifactory.wma.chs.usgs.gov/artifactory/wma-binaries/lfs/api/nwc2wmadataprep/"$(basename $file)""
 
               done
 
