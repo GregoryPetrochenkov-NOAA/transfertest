@@ -34,7 +34,7 @@ pipeline {
       steps {
           sh '''mkdir $WORKSPACE/wmadata
             mkdir $WORKSPACE/wmadata/dumps
-            
+
               /usr/local/bin/aws s3 cp s3://test-scnoble/gagesii.pgdump.gz $WORKSPACE/wmadata/dumps/gagesii.pgdump.gz
               /usr/local/bin/aws s3 cp s3://test-scnoble/huc08.pgdump.gz $WORKSPACE/wmadata/dumps/huc08.pgdump.gz
               /usr/local/bin/aws s3 cp s3://test-scnoble/huc12.pgdump.gz $WORKSPACE/wmadata/dumps/huc12.pgdump.gz
@@ -48,7 +48,7 @@ pipeline {
               /usr/local/bin/aws s3 cp s3://test-scnoble/huc12agg.gpkg $WORKSPACE/wmadata/dumps/huc12agg.gpkg
               /usr/local/bin/aws s3 cp s3://test-scnoble/us_historical_counties.gpkg $WORKSPACE/wmadata/dumps/us_historical_counties.gpkg
 
-              for file in ./{dumps,data}/*
+              for file in $WORKSPACE/wmadata/dumps/*
 
               do
               test=$(basename $file)
