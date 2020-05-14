@@ -4,7 +4,7 @@ pipeline {
       label 'project:any'
     }
   }
-  options { timestamp () }
+  options { timestamps () }
   stages {
     stage('Set Build Description') {
       steps {
