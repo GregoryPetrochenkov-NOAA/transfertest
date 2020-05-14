@@ -44,7 +44,7 @@ pipeline {
 
               for file in $WORKSPACE/wmadata/dumps/*
 
-              arturl= "https://artifactory.wma.chs.usgs.gov/artifactory/wma-binaries/lfs/api/nwc2wmadataprep/"
+              arturl="https://artifactory.wma.chs.usgs.gov/artifactory/wma-binaries/lfs/api/nwc2wmadataprep/"
               do
               curl -u ''$artuser:$artpass'' -T $file $arturl$(basename $file)
               done
