@@ -4,7 +4,6 @@ pipeline {
       label 'project:any'
     }
   }
-  options { timestamps () }
   stages {
     stage('Set Build Description') {
       steps {
@@ -44,10 +43,11 @@ pipeline {
 
               for file in $WORKSPACE/wmadata/dumps/*
 
-              arturl="https://artifactory.wma.chs.usgs.gov/artifactory/wma-binaries/lfs/api/nwc2wmadataprep/"
               do
-              curl -u ''$artuser:$artpass'' -T $file $arturl$(basename $file)
+              curl -u ''$artuser:$artpass'' -T $file "https://artifactory.wma.chs.usgs.gov/artifactory/wma-binaries/lfs/api/nwc2wmadataprep/"$(basename $file)""
               done
+
+
             '''
       }
     }
