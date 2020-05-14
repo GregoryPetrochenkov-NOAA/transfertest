@@ -33,12 +33,13 @@ pipeline {
     stage('Transfer') {
       steps {
           sh '''mkdir $WORKSPACE/wmadata
-            mkdir $WORKSPACE/wmadata/dumps
+              mkdir $WORKSPACE/wmadata/dumps
 
-              /usr/local/bin/aws s3 cp s3://test-scnoble/huc12agg.pgdump.gz $WORKSPACE/wmadata/dumps/huc12agg.pgdump.gz
-              /usr/local/bin/aws s3 cp s3://test-scnoble/nhdflowline_network.pgdump.gz $WORKSPACE/wmadata/dumps/nhdflowline_network.pgdump.gz
-              /usr/local/bin/aws s3 cp s3://test-scnoble/catchmentsp.pgdump.gz $WORKSPACE/wmadata/dumps/catchmentsp.pgdump.gz
-              /usr/local/bin/aws s3 cp s3://test-scnoble/huc12agg.gpkg $WORKSPACE/wmadata/dumps/huc12agg.gpkg
+              s3url=s3://prod-owi-resources/resources/Application/iow/wmadata-schema
+              /usr/local/bin/aws s3 cp $s3url/huc12agg.pgdump.gz $WORKSPACE/wmadata/dumps/huc12agg.pgdump.gz
+              /usr/local/bin/aws s3 cp $s3url/nhdflowline_network.pgdump.gz $WORKSPACE/wmadata/dumps/nhdflowline_network.pgdump.gz
+              /usr/local/bin/aws s3 cp $s3url/catchmentsp.pgdump.gz $WORKSPACE/wmadata/dumps/catchmentsp.pgdump.gz
+              /usr/local/bin/aws s3 cp $s3url/huc12agg.gpkg $WORKSPACE/wmadata/dumps/huc12agg.gpkg
 
               for file in $WORKSPACE/wmadata/dumps/*
 
