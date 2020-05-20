@@ -107,7 +107,9 @@ pipeline {
     }
     stage('Upload to Artifactory') {
         steps{
-         rlayers=("nhdplus%3ANED" "nhdplus%3ANHDPlus_HydroDEM")
+
+         sh '''
+              rlayers=("nhdplus%3ANED" "nhdplus%3ANHDPlus_HydroDEM")
 
               for file in ${rlayers[@]}
               do
@@ -127,6 +129,7 @@ pipeline {
               do
               curl -u ''$artuser:$artpass'' -T $file "https://artifactory.wma.chs.usgs.gov/artifactory/wma-binaries/lfs/api/nwc2wmadataprep/"$(basename $file)""
               done
+            '''
         }
     }
   }
