@@ -44,7 +44,7 @@ pipeline {
               for file in ${vlayers[@]}
               do
 
-              curl https://cida.usgs.gov/nwc/geoserver/wfs?service=wfs&version=2.0.0&request=GetFeature&typeNames=$file > $WORKSPACE/wmadata/dumps/"${file##*:}"
+              curl "https://cida.usgs.gov/nwc/geoserver/wfs?service=wfs&version=2.0.0&request=getfeature&typeNames=$file" > $WORKSPACE/wmadata/dumps/"${file##*:}"
 
               done
 
@@ -55,7 +55,7 @@ pipeline {
               for file in ${vlayers2[@]}
               do
 
-              curl https://cida.usgs.gov/nwc/geoserver/wfs?service=wfs&version=2.0.0&request=GetFeature&typeNames=$file > $WORKSPACE/wmadata/dumps/"${file##*:}"
+              curl "https://cida.usgs.gov/nwc/geoserver/wfs?service=wfs&version=2.0.0&request=GetFeature&typeNames=$file" > $WORKSPACE/wmadata/dumps/"${file##*:}"
 
               done
 
@@ -106,7 +106,7 @@ pipeline {
               for file in ${rlayers[@]}
               do
 
-              curl https://cida.usgs.gov/nwc/geoserver/wms?request=GetMap&service=WMS&version=1.1.1&layers=$file&srs=EPSG%3A5070&format=image/geotiff > $WORKSPACE/wmadata/dumps/"${file##*:}".tif
+              curl "https://cida.usgs.gov/nwc/geoserver/wms?request=GetMap&service=WMS&version=1.1.1&layers=$file&srs=EPSG%3A5070&format=image/geotiff" > $WORKSPACE/wmadata/dumps/"${file##*:}".tif
 
               done
 
