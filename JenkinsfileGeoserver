@@ -72,16 +72,14 @@ pipeline {
     }
     stage('GPKG') {
         agent {
-           docker { image 'osgeo/gdal:alpine-normal-latest'
+           docker { image 'geodata/gdal'
              args '-v $WORKSPACE:/data'
              reuseNode true
              }
          }
          steps {
 
-             pwd
-             ls
-
+             sh '''
              vlayers=('NWC:huc12_se_basins_v2' 'NWC:gagesii_basins' 'NWC:epa_basins'
                   'NWC:huc12_se_basins_v2_local' 'NWC:gagesii_hucComp' 'BioData:SiteInfo'
                   'WBD:huc12' 'WBD:huc12all'
@@ -103,6 +101,7 @@ pipeline {
               ogr2ogr -f GPKG -t_srs EPSG:4326 $WORKSPACE/wmadata/dumps/"${file##*:}".gpkg \
                $WORKSPACE/wmadata/dumps/"${file##*:}"
               done
+              '''
 
          }
     }
