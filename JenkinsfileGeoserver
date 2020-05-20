@@ -32,16 +32,9 @@ pipeline {
     }
 
     stage('Transfer') {
-      agent{
-        docker{ image 'osgeo/gdal:alpine-normal-latest'
-             args '-v $WORKSPACE:/data'
-             reuseNode true
-             }
-      }
       steps {
           sh '''mkdir $WORKSPACE/wmadata
               mkdir $WORKSPACE/wmadata/dumps
-
 
               vlayers=('NWC:huc12_se_basins_v2' 'NWC:gagesii_basins' 'NWC:epa_basins'
               'NWC:huc12_se_basins_v2_local' 'NWC:gagesii_hucComp' 'BioData:SiteInfo'
@@ -56,9 +49,6 @@ pipeline {
                 version=2.0.0&
                 request=GetFeature&
                 typeNames=$file > $WORKSPACE/wmadata/dumps/"${file##*:}"
-
-              ogr2ogr -f GPKG -t_srs EPSG:4269 $WORKSPACE/wmadata/dumps/"${file##*:}".gpkg \
-               $WORKSPACE/wmadata/dumps/"${file##*:}"
 
               done
 
@@ -75,12 +65,48 @@ pipeline {
                 request=GetFeature&
                 typeNames=$file > $WORKSPACE/wmadata/dumps/"${file##*:}"
 
-              ogr2ogr -f GPKG -t_srs EPSG:4326 $WORKSPACE/wmadata/dumps/"${file##*:}".gpkg \
-               $WORKSPACE/wmadata/dumps/"${file##*:}"
-
               done
 
-              rlayers=("nhdplus%3ANED" "nhdplus%3ANHDPlus_HydroDEM")
+            '''
+      }
+    }
+    stage('GPKG') {
+        docker{ image 'osgeo/gdal:alpine-normal-latest'
+             args '-v $WORKSPACE:/data'
+             reuseNode true
+             }
+         steps {
+
+             pwd
+             ls
+
+             vlayers=('NWC:huc12_se_basins_v2' 'NWC:gagesii_basins' 'NWC:epa_basins'
+                  'NWC:huc12_se_basins_v2_local' 'NWC:gagesii_hucComp' 'BioData:SiteInfo'
+                  'WBD:huc12' 'WBD:huc12all'
+                  )
+
+              for file in ${vlayers[@]}
+              do
+               ogr2ogr -f GPKG -t_srs EPSG:4269 $WORKSPACE/wmadata/dumps/"${file##*:}".gpkg \
+               $WORKSPACE/wmadata/dumps/"${file##*:}"
+               done
+
+              vlayers2=('vizlab:predicted_species_2040-2064' 'vizlab:predicted_species_1989-2014'
+              'vizlab:predicted_species_2065-2089'
+              )
+
+              for file in ${vlayers2[@]}
+              do
+
+              ogr2ogr -f GPKG -t_srs EPSG:4326 $WORKSPACE/wmadata/dumps/"${file##*:}".gpkg \
+               $WORKSPACE/wmadata/dumps/"${file##*:}"
+              done
+
+         }
+    }
+    stage('Upload to Artifactory') {
+        steps{
+         rlayers=("nhdplus%3ANED" "nhdplus%3ANHDPlus_HydroDEM")
 
               for file in ${rlayers[@]}
               do
@@ -95,15 +121,12 @@ pipeline {
 
               done
 
-              for file in $WORKSPACE/wmadata/dumps/*
+              for file in $WORKSPACE/wmadata/dumps/{.gpkg,.tif}
 
               do
               curl -u ''$artuser:$artpass'' -T $file "https://artifactory.wma.chs.usgs.gov/artifactory/wma-binaries/lfs/api/nwc2wmadataprep/"$(basename $file)""
               done
-
-
-            '''
-      }
+        }
     }
   }
 }
