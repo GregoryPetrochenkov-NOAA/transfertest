@@ -38,7 +38,7 @@ pipeline {
 
               vlayers=('NWC:huc12_se_basins_v2' 'NWC:gagesii_basins' 'NWC:epa_basins'
               'NWC:huc12_se_basins_v2_local' 'NWC:gagesii_hucComp' 'BioData:SiteInfo'
-              'WBD:huc12' 'WBD:huc12all'
+              'WBD:huc12'
               )
 
               for file in ${vlayers[@]}
@@ -74,7 +74,7 @@ pipeline {
              sh '''
              vlayers=('NWC:huc12_se_basins_v2' 'NWC:gagesii_basins' 'NWC:epa_basins'
                   'NWC:huc12_se_basins_v2_local' 'NWC:gagesii_hucComp' 'BioData:SiteInfo'
-                  'WBD:huc12' 'WBD:huc12all'
+                  'WBD:huc12'
                   )
 
               for file in ${vlayers[@]}
