@@ -71,10 +71,12 @@ pipeline {
       }
     }
     stage('GPKG') {
-        docker{ image 'osgeo/gdal:alpine-normal-latest'
+        agent {
+           docker { image 'osgeo/gdal:alpine-normal-latest'
              args '-v $WORKSPACE:/data'
              reuseNode true
              }
+         }
          steps {
 
              pwd
