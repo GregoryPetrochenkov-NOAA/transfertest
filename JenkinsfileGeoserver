@@ -32,10 +32,12 @@ pipeline {
     }
 
     stage('Transfer') {
-      docker{ image 'osgeo/gdal:alpine-normal-latest'
-           args '-v $WORKSPACE:/data'
-           reuseNode true
-           }
+      agent{
+        docker{ image 'osgeo/gdal:alpine-normal-latest'
+             args '-v $WORKSPACE:/data'
+             reuseNode true
+             }
+      }
       steps {
           sh '''mkdir $WORKSPACE/wmadata
               mkdir $WORKSPACE/wmadata/dumps
