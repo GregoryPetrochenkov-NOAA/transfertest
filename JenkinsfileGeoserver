@@ -101,16 +101,8 @@ pipeline {
         steps{
 
          sh '''
-              rlayers=("nhdplus%3ANED" "nhdplus%3ANHDPlus_HydroDEM")
 
-              for file in ${rlayers[@]}
-              do
-
-              curl "https://cida.usgs.gov/nwc/geoserver/wms?request=GetMap&service=WMS&version=1.1.1&layers=$file&srs=EPSG%3A5070&format=image/geotiff" > $WORKSPACE/wmadata/dumps/"${file##*:}".tif
-
-              done
-
-              for file in $WORKSPACE/wmadata/dumps/{.gpkg,.tif}
+              for file in $WORKSPACE/wmadata/dumps/*.gpkg
 
               do
               curl -u ''$artuser:$artpass'' -T $file "https://artifactory.wma.chs.usgs.gov/artifactory/wma-binaries/lfs/api/nwc2wmadataprep/"$(basename $file)""
